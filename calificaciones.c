@@ -9,7 +9,9 @@ int main() {
     float max_mat[3], min_mat[3];
     int aprobados[3], reprobados[3];
     int i, j, opc, valido, len;
+    char buffer[20];
 
+    // Ingreso y validacion de nombres
     for (i = 0; i < 5; i++) {
         do {
             valido = 1;
@@ -34,19 +36,25 @@ int main() {
         } while (!valido);
     }
 
+    // Ingreso de notas con validacion de numeros y rango
     for (i = 0; i < 5; i++) {
         printf("\nIngrese las 3 calificaciones de %s:\n", nombres[i]);
         for (j = 0; j < 3; j++) {
             do {
-                printf("  Materia %d: ", j + 1);
-                scanf("%f", &notas[i][j]);
-                if (notas[i][j] < 0 || notas[i][j] > 10) {
-                    printf("  Nota invalida. Debe estar entre 0 y 10.\n");
+                printf(" Materia %d: ", j + 1);
+                fflush(stdin);
+                fgets(buffer, sizeof(buffer), stdin);
+                valido = sscanf(buffer, "%f", &notas[i][j]);
+
+                if (!valido || notas[i][j] < 0 || notas[i][j] > 10) {
+                    printf(" Nota invalida. Debe ser un numero entre 0 y 10.\n");
+                    valido = 0;
                 }
-            } while (notas[i][j] < 0 || notas[i][j] > 10);
+            } while (!valido);
         }
     }
 
+    // Calculos por estudiante
     for (i = 0; i < 5; i++) {
         prom_est[i] = 0;
         max_est[i] = min_est[i] = notas[i][0];
@@ -59,6 +67,7 @@ int main() {
         prom_est[i] /= 3;
     }
 
+    // Calculos por materia
     for (j = 0; j < 3; j++) {
         prom_mat[j] = 0;
         max_mat[j] = min_mat[j] = notas[0][j];
@@ -77,6 +86,7 @@ int main() {
         prom_mat[j] /= 5;
     }
 
+    // Menu
     do {
         printf("\n===== MENU =====\n");
         printf("1. Promedio por estudiante\n");
@@ -89,44 +99,44 @@ int main() {
         scanf("%d", &opc);
 
         switch (opc) {
-        case 1:
-            printf("\n--- Promedio por estudiante ---\n");
-            for (i = 0; i < 5; i++) {
-                printf("%s: %.2f\n", nombres[i], prom_est[i]);
-            }
-            break;
-        case 2:
-            printf("\n--- Promedio por materia ---\n");
-            for (j = 0; j < 3; j++) {
-                printf("Materia %d: %.2f\n", j + 1, prom_mat[j]);
-            }
-            break;
-        case 3:
-            printf("\n--- Nota mayor y menor por estudiante ---\n");
-            for (i = 0; i < 5; i++) {
-                printf("%s: Mayor = %.2f, Menor = %.2f\n", nombres[i], max_est[i], min_est[i]);
-            }
-            break;
-        case 4:
-            printf("\n--- Nota mayor y menor por materia ---\n");
-            for (j = 0; j < 3; j++) {
-                printf("Materia %d: Mayor = %.2f, Menor = %.2f\n", j + 1, max_mat[j], min_mat[j]);
-            }
-            break;
-        case 5:
-            printf("\n--- Aprobados y reprobados por materia ---\n");
-            for (j = 0; j < 3; j++) {
-                printf("Materia %d: Aprobados = %d, Reprobados = %d\n", j + 1, aprobados[j], reprobados[j]);
-            }
-            break;
-        case 6:
-            printf("Saliendo.\n");
-            break;
-        default:
-            printf("Opcion invalida.\n");
+            case 1:
+                printf("\n--- Promedio por estudiante ---\n");
+                for (i = 0; i < 5; i++) {
+                    printf("%s: %.2f\n", nombres[i], prom_est[i]);
+                }
+                break;
+            case 2:
+                printf("\n--- Promedio por materia ---\n");
+                for (j = 0; j < 3; j++) {
+                    printf("Materia %d: %.2f\n", j + 1, prom_mat[j]);
+                }
+                break;
+            case 3:
+                printf("\n--- Nota mayor y menor por estudiante ---\n");
+                for (i = 0; i < 5; i++) {
+                    printf("%s: Mayor = %.2f, Menor = %.2f\n", nombres[i], max_est[i], min_est[i]);
+                }
+                break;
+            case 4:
+                printf("\n--- Nota mayor y menor por materia ---\n");
+                for (j = 0; j < 3; j++) {
+                    printf("Materia %d: Mayor = %.2f, Menor = %.2f\n", j + 1, max_mat[j], min_mat[j]);
+                }
+                break;
+            case 5:
+                printf("\n--- Aprobados y reprobados por materia ---\n");
+                for (j = 0; j < 3; j++) {
+                    printf("Materia %d: Aprobados = %d, Reprobados = %d\n", j + 1, aprobados[j], reprobados[j]);
+                }
+                break;
+            case 6:
+                printf("Saliendo del programa.\n");
+                break;
+            default:
+                printf("Opcion invalida.\n");
         }
 
     } while (opc != 6);
 
-    return 0;
+    return 0;
 }
